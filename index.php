@@ -1,34 +1,49 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require('init.php');
+require('templates/header.php');
 
-function get_post_1_titulo()
-{
-    $post_1_titulo = 'Lorem ipsum dolor sit amet';
-    return $post_1_titulo;
-}
+$result = mysqli_query($app_db, "SELECT * FROM posts");
+$all_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-function get_post_1_conteudo()
-{
-    $post_1_conteudo = 'Mauris lobortis, turpis sit amet pulvinar hendrerit, elit ligula accumsan ligula, ut interdum massa elit vitae justo.';
-    return $post_1_conteudo;
-}
-
-function get_post_2_titulo()
-{
-    $post_2_titulo = 'Mauris lobortis, turpis sit amet pulvinar hendrerit';
-    return $post_2_titulo;
-}
-
-function get_post_2_conteudo()
-{
-    $post_2_conteudo = 'Maecenas malesuada malesuada eleifend. Nam lobortis risus in est sollicitudin, ut egestas orci pharetra.';
-    return $post_2_conteudo;
+$post_found = false;
+if (isset($_GET['view'])) {
+    $query = "SELECT * FROM posts WHERE id = " . $_GET['view'];
+    $result = mysqli_query($app_db, $query);
+    if ($result) {
+        $post_found = mysqli_fetch_assoc($result);
+        $all_posts = [$post_found];
+    }
 }
 
 ?>
+<div class="posts">
+    <?php foreach ($all_posts as $post): ?>
+        <article class="post">
+            <header>
+                <h2 class="post-title">
+                    <a href="?view=<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a>
+                </h2>
+            </header>
+            <div class="post-content">
+                <?php if ($post_found): ?>
+                    <?php echo $post['content']; ?>
+                <?php else: ?>
+                    <?php echo $post['excerpt']; ?>
+                <?php endif; ?>
+            </div>
+            <footer>
+                <span class="post-date">
+                    Publicado em:
+                    <?php
+                    $date = new DateTime($post['published_on']);
+                    echo $date->format('d M Y');
+                    ?>
+                </span>
 
-<h1>
-    <?php echo $my_var; ?>
-</h1>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>
+
+<?php require('templates/footer.php'); ?>
