@@ -2,10 +2,10 @@
 
 class Db {
 
-  private $app_db = false;
+  private $app_db;
 
   public function __construct( $host, $user, $password, $database, $port ) {
-    $this->app_db = mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, DB_PORT );
+        $this->app_db = mysqli_connect( $host, $user, $password, $database, $port );
     if ( $this->app_db === false ) {
     	die( 'Erro de conexão com o banco de dados' );
     }
