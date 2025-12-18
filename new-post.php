@@ -1,7 +1,6 @@
 <?php
 
 require('init.php');
-require('templates/header.php');
 
 $error = false;
 $title = '';
@@ -17,18 +16,15 @@ if (isset($_POST['submit-new-post'])) {
     if (empty($title) || empty($content)) {
         $error = true;
     } else {
-        $new_post = [
-            'id' => 0,
-            'title' => $title,
-            'excerpt' => $excerpt,
-            'content' => $content,
-            'published_on' => date('d-m-Y H:i:s')
-        ];
-
-        die('Formulário enviado!');
+        insert_post($title, $excerpt, $content);
+        // Redirecionar para a home
+        redirect_to('index.php?success=true');
     }
 }
 ?>
+
+<?php require('templates/header.php'); ?>
+
 <h2>Criar novo Post</h2>
 
 <?php if ($error): ?>
