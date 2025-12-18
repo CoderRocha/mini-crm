@@ -1,6 +1,7 @@
 <?php
 
 // Debug de erros
+// Remover isso em produção
 error_reporting( E_ALL );
 ini_set( 'display_errors', 1 );
 
@@ -14,3 +15,8 @@ define( 'DB_USER', 'root' );
 define( 'DB_PASSWORD', '' );
 define( 'DB_DATABASE', 'mini_crm' );
 define( 'DB_PORT', '3306' );
+
+// Definir usuário e senha de admin
+
+define( 'ADMIN_USER', 'guilherme' );
+define( 'ADMIN_PASS', 'rocha' );

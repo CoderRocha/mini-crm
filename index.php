@@ -2,13 +2,6 @@
 
 require('init.php');
 
-if (isset($_GET['delete-post'])) {
-    $id = $_GET['delete-post'];
-    delete_post($id);
-    redirect_to('index.php');
-    die();
-}
-
 $all_posts = get_all_posts();
 
 $post_found = false;
@@ -22,12 +15,6 @@ if (isset($_GET['view'])) {
 ?>
 
 <?php require('templates/header.php'); ?>
-
-<?php if (isset($_GET['success'])): ?>
-    <div class="success">
-        Post criado com sucesso!
-    </div>
-<?php endif; ?>
 
 <div class="posts">
     <?php foreach ($all_posts as $post): ?>
@@ -52,9 +39,6 @@ if (isset($_GET['view'])) {
                     echo $date->format('d M Y');
                     ?>
                 </span>
-                <div class="delete-post">
-                    <a href="?delete-post=<?php echo $post['id']; ?>">Excluir Post</a>
-                </div>
             </footer>
         </article>
     <?php endforeach; ?>
