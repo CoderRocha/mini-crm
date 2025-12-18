@@ -1,23 +1,18 @@
 <?php
 
-// debug de erros
-error_reporting( E_ALL );
-ini_set( 'display_errors', 1 );
+if (!file_exists('config.php')) {
+    die('ERRO: O arquivo config.php não existe!');
+}
 
-setlocale( LC_TIME, 'pt_BR' );
-date_default_timezone_set( 'America/Sao_Paulo' );
+require 'config.php';
 
-// conexão com o banco d dados
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'mini_crm';
-$port = '3306';
+setlocale(LC_TIME, SITE_LANG);
+date_default_timezone_set(SITE_TIMEZONE);
 
-$app_db = mysqli_connect($host, $user, $password, $database, $port);
-
+$app_db = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, DB_PORT);
 if ($app_db === false) {
     die("Erro ao conectar com o banco de dados");
 }
 
-require( 'inc/posts.php' );
+require('inc/posts.php');
+require('inc/helpers.php');
