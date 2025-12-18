@@ -1,22 +1,34 @@
 <?php
 
 require('init.php');
-require('templates/header.php');
 
-$result = mysqli_query($app_db, "SELECT * FROM posts");
-$all_posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+if (isset($_GET['delete-post'])) {
+    $id = $_GET['delete-post'];
+    delete_post($id);
+    redirect_to('index.php');
+    die();
+}
+
+$all_posts = get_all_posts();
 
 $post_found = false;
 if (isset($_GET['view'])) {
-    $query = "SELECT * FROM posts WHERE id = " . $_GET['view'];
-    $result = mysqli_query($app_db, $query);
-    if ($result) {
-        $post_found = mysqli_fetch_assoc($result);
+    $post_found = get_post($_GET['view']);
+    if ($post_found) {
         $all_posts = [$post_found];
     }
 }
 
 ?>
+
+<?php require('templates/header.php'); ?>
+
+<?php if (isset($_GET['success'])): ?>
+    <div class="success">
+        Post criado com sucesso!
+    </div>
+<?php endif; ?>
+
 <div class="posts">
     <?php foreach ($all_posts as $post): ?>
         <article class="post">
@@ -40,10 +52,12 @@ if (isset($_GET['view'])) {
                     echo $date->format('d M Y');
                     ?>
                 </span>
-
+                <div class="delete-post">
+                    <a href="?delete-post=<?php echo $post['id']; ?>">Excluir Post</a>
+                </div>
             </footer>
         </article>
     <?php endforeach; ?>
 </div>
 
-<?php require('templates/footer.php'); ?>
+<?php require('templates/footer.php');
