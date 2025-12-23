@@ -10,13 +10,13 @@
 
 <form action="" method="post">
     <label for="title">Título (Obrigatório)</label>
-    <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($title, ENT_QUOTES); ?>">
+    <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($title, ENT_QUOTES); ?>" required>
 
     <label for="excerpt">Excerto</label>
     <input type="text" name="excerpt" id="excerpt" value="<?php echo htmlspecialchars($excerpt, ENT_QUOTES); ?>">
 
     <label for="content">Conteúdo (Obrigatório)</label>
-    <textarea name="content" id="content" cols="30" rows="30"><?php echo htmlspecialchars($content, ENT_QUOTES); ?></textarea>
+    <textarea name="content" id="content" cols="30" rows="30" required><?php echo htmlspecialchars($content, ENT_QUOTES); ?></textarea>
 
     <p>
         <input type="submit" name="submit-new-post" value="Novo Post">
