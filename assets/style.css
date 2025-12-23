@@ -607,13 +607,13 @@ nav#site-navigation {
 }
 
 nav#site-navigation h1 {
-	background: #fff url('header-background.jpg') no-repeat left bottom;
-	background-size:     cover;
+	background: #fff url('header-background.jpg') no-repeat center center;
+	background-size: 100% auto;
 	margin-bottom:0;
 	padding-bottom:2rem;
 	display: flex;
 	justify-content: center;
-	height:250px;
+	min-height:250px;
 	align-items: center;
 }
 
