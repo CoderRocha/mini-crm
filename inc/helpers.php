@@ -35,8 +35,14 @@ function check_hash( $action, $hash ) {
  */
 
 function is_logged_in() {
-	$is_user_logged_in = isset( $_SESSION['user'] ) && $_SESSION['user'] === ADMIN_USER;
-	return $is_user_logged_in;
+	return isset( $_SESSION['user'] ) && isset( $_SESSION['user']['id'] );
+}
+
+/**
+ * Retorna o usuário logado
+ */
+function get_logged_in_user() {
+	return isset( $_SESSION['user'] ) ? $_SESSION['user'] : null;
 }
 
 /**
@@ -44,8 +50,11 @@ function is_logged_in() {
  */
 
 function login( $username, $password ) {
-	if ( $username === ADMIN_USER && $password === ADMIN_PASS ) {
-		$_SESSION['user'] = ADMIN_USER;
+	$user = get_user_by_username( $username );
+	
+	if ( $user && password_verify( $password, $user['password'] ) ) {
+		unset( $user['password'] );
+		$_SESSION['user'] = $user;
 		return true;
 	}
 
