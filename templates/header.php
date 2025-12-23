@@ -26,7 +26,9 @@
 				<?php if (can_register_users($current_user)): ?>
 					<li><a href="<?php echo SITE_URL; ?>/register.php">Cadastrar Usuário</a></li>
 				<?php endif; ?>
-				<li><a href="<?php echo SITE_URL; ?>/admin">Painel Adm</a></li>
+				<?php if (is_admin($current_user)): ?>
+					<li><a href="<?php echo SITE_URL; ?>/admin">Painel Adm</a></li>
+				<?php endif; ?>
 				<li><a href="<?php echo SITE_URL; ?>?logout=true">Logout</a></li>
 			<?php else: ?>
 				<li><a href="<?php echo SITE_URL; ?>/login.php">Login</a></li>
