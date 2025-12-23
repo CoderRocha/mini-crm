@@ -8,6 +8,10 @@ if (! is_logged_in()) {
 
 $current_user = get_logged_in_user();
 
+if (!is_admin($current_user)) {
+    redirect_to('../index.php');
+}
+
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
