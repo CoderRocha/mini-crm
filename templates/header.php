@@ -15,7 +15,7 @@
 			<a href="index.php">Indie Games Hub</a>
 		</h1>
 		<ul class="main-menu column clearfix">
-			<li><a href="<?php echo SITE_URL; ?>/index.php">Blog</a></li>
+			<li><a href="<?php echo SITE_URL; ?>/index.php">Home</a></li>
 			<?php if ( is_logged_in() ): 
 				$current_user = get_logged_in_user();
 			?>
