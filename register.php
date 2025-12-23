@@ -2,12 +2,10 @@
 
 <?php
 
-if (!is_logged_in()) {
-    redirect_to('login.php');
-}
-
 $current_user = get_logged_in_user();
-if (!can_register_users($current_user)) {
+$is_admin = $current_user && is_admin($current_user);
+
+if ($current_user && !$is_admin) {
     redirect_to('index.php');
 }
 
@@ -36,9 +34,17 @@ if (isset($_POST['submit-register'])) {
     } elseif ($user_type < 1 || $user_type > 4) {
         $error = true;
         $error_message = "Tipo de usuário inválido.";
+    } elseif (!$is_admin && $user_type == 4) {
+
+        $error = true;
+        $error_message = "Você não tem permissão para criar uma conta de administrador.";
     } else {
         if (create_user($username, $password, $email, $user_type, $display_name, $bio)) {
-            $success = true;
+            if ($is_admin) {
+                $success = true;
+            } else {
+                redirect_to('login.php?registered=1');
+            }
         } else {
             $error = true;
             $error_message = "Erro ao criar usuário. Tente novamente.";
@@ -50,7 +56,7 @@ if (isset($_POST['submit-register'])) {
 
 <?php require('templates/header.php'); ?>
 
-<h2>Cadastrar Novo Usuário</h2>
+<h2><?php echo $is_admin ? 'Cadastrar Novo Usuário' : 'Criar Conta'; ?></h2>
 
 <?php if ($success): ?>
     <div class="success">Usuário cadastrado com sucesso!</div>
@@ -78,8 +84,13 @@ if (isset($_POST['submit-register'])) {
         <option value="1" <?php echo (isset($_POST['user_type']) && $_POST['user_type'] == 1) ? 'selected' : ''; ?>>Player</option>
         <option value="2" <?php echo (isset($_POST['user_type']) && $_POST['user_type'] == 2) ? 'selected' : ''; ?>>Indie Dev</option>
         <option value="3" <?php echo (isset($_POST['user_type']) && $_POST['user_type'] == 3) ? 'selected' : ''; ?>>Player/Dev</option>
-        <option value="4" <?php echo (isset($_POST['user_type']) && $_POST['user_type'] == 4) ? 'selected' : ''; ?>>Admin</option>
+        <?php if ($is_admin): ?>
+            <option value="4" <?php echo (isset($_POST['user_type']) && $_POST['user_type'] == 4) ? 'selected' : ''; ?>>Admin</option>
+        <?php endif; ?>
     </select>
+    <?php if (!$is_admin): ?>
+        <small>Você pode escolher entre Player, Indie Dev ou Player/Dev. Apenas administradores podem criar contas de Admin.</small>
+    <?php endif; ?>
 
     <label for="bio">Bio</label>
     <textarea name="bio" id="bio" rows="4"><?php echo isset($_POST['bio']) ? htmlspecialchars($_POST['bio'], ENT_QUOTES) : ''; ?></textarea>
@@ -87,8 +98,14 @@ if (isset($_POST['submit-register'])) {
     <input type="hidden" name="hash" value="<?php echo htmlspecialchars(generate_hash('register'), ENT_QUOTES); ?>">
 
     <p>
-        <input type="submit" name="submit-register" value="Cadastrar Usuário">
+        <input type="submit" name="submit-register" value="<?php echo $is_admin ? 'Cadastrar Usuário' : 'Criar Conta'; ?>">
     </p>
 </form>
+
+<?php if (!$is_admin): ?>
+    <p style="margin-top: 2rem; text-align: center;">
+        Já tem uma conta? <a href="<?php echo SITE_URL; ?>/login.php">Faça login aqui</a>
+    </p>
+<?php endif; ?>
 
 <?php require('templates/footer.php'); ?>

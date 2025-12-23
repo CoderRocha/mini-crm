@@ -4,6 +4,7 @@
 
 $error = false;
 $error_message = '';
+$registered = isset($_GET['registered']) && $_GET['registered'] == 1;
 
 if (isset($_POST['submit-login'])) {
     if (! check_hash('login', $_POST['hash'])) {
@@ -28,6 +29,10 @@ if (is_logged_in()) {
 
 <h2>Login</h2>
 
+<?php if ($registered): ?>
+    <div class="success">Conta criada com sucesso! Faça login para continuar.</div>
+<?php endif; ?>
+
 <?php if ($error): ?>
     <div class="error"><?php echo htmlspecialchars($error_message, ENT_QUOTES); ?></div>
 <?php endif; ?>
@@ -45,5 +50,9 @@ if (is_logged_in()) {
         <input type="submit" name="submit-login" value="Login">
     </p>
 </form>
+
+<p style="margin-top: 2rem; text-align: center;">
+    Não tem uma conta? <a href="<?php echo SITE_URL; ?>/register.php">Cadastre-se aqui</a>
+</p>
 
 <?php require('templates/footer.php'); ?>
