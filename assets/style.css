@@ -439,6 +439,15 @@ a:focus, a:hover {
 	text-shadow: 0 0 5px rgba(163, 44, 44, 0.5);
 }
 
+nav#site-navigation h1 > a {
+	transition: all 0.3s ease;
+}
+
+nav#site-navigation h1 > a:hover {
+	color: #8a2525;
+	text-shadow: 0 0 5px rgba(163, 44, 44, 0.3);
+}
+
 dl,
 ol,
 ul {
