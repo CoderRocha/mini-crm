@@ -10,6 +10,7 @@ define( 'SITE_TIMEZONE', 'America/Sao_Paulo' );
 define( 'SITE_LANG', 'pt-br' );
 
 // Conexão com o banco de dados
+// Mudar os dados ao ir em produção
 define( 'DB_HOST', 'localhost' );
 define( 'DB_USER', 'root' );
 define( 'DB_PASSWORD', '' );
