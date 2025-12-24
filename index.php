@@ -2,6 +2,28 @@
 
 require('init.php');
 
+if (isset($_GET['delete-post'])) {
+    if (!is_logged_in()) {
+        redirect_to('login.php');
+    }
+    
+    $current_user = get_logged_in_user();
+    $id = $_GET['delete-post'];
+    
+    if (!check_hash('delete-post-' . $id, $_GET['hash'])) {
+        die('Erro ao deletar o Post. Tente novamente.');
+    }
+    
+    $post = get_post($id);
+    if ($post && can_delete_post($current_user, $post)) {
+        delete_post($id);
+        redirect_to('index.php?success=deleted');
+    } else {
+        die('Você não tem permissão para deletar este post.');
+    }
+    die();
+}
+
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 20;
@@ -27,9 +49,15 @@ if (isset($_GET['view'])) {
     $total_pages = max(1, ceil($total_posts / $per_page));
 }
 
+$current_user = is_logged_in() ? get_logged_in_user() : null;
+
 ?>
 
 <?php require('templates/header.php'); ?>
+
+<?php if (isset($_GET['success']) && $_GET['success'] == 'deleted'): ?>
+    <div class="success">Post deletado com sucesso!</div>
+<?php endif; ?>
 
 <?php if (!isset($_GET['view'])): ?>
     <div class="search-bar">
@@ -72,13 +100,22 @@ if (isset($_GET['view'])) {
                     <?php endif; ?>
                 </div>
                 <footer>
-                    <span class="post-date">
-                        Publicado em:
-                        <?php
-                        $date = new DateTime($post['published_on']);
-                        echo $date->format('d M Y');
-                        ?>
-                    </span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <span class="post-date">
+                            Publicado em:
+                            <?php
+                            $date = new DateTime($post['published_on']);
+                            echo $date->format('d M Y');
+                            ?>
+                        </span>
+                        <?php if ($current_user && can_delete_post($current_user, $post)): ?>
+                            <a href="?delete-post=<?php echo $post['id']; ?>&hash=<?php echo generate_hash('delete-post-' . $post['id']); ?>"
+                               onclick="return confirm('Tem certeza que deseja deletar este post?');"
+                               class="button button-outline" style="font-size: 1.2rem; padding: 0.5rem 1.5rem;">
+                                Deletar Post
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </footer>
             </article>
         <?php endforeach; ?>
