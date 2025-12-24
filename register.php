@@ -70,11 +70,11 @@ if (isset($_POST['submit-register'])) {
     <label for="username">Usuário *</label>
     <input type="text" name="username" id="username" required value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username'], ENT_QUOTES) : ''; ?>">
 
-    <label for="password">Senha *</label>
-    <input type="password" name="password" id="password" required>
-
     <label for="email">Email *</label>
     <input type="email" name="email" id="email" required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email'], ENT_QUOTES) : ''; ?>">
+    
+    <label for="password">Senha *</label>
+    <input type="password" name="password" id="password" required>
 
     <label for="display_name">Nome de Exibição *</label>
     <input type="text" name="display_name" id="display_name" required value="<?php echo isset($_POST['display_name']) ? htmlspecialchars($_POST['display_name'], ENT_QUOTES) : ''; ?>">
