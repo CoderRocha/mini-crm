@@ -25,7 +25,7 @@ switch ($action) {
                 $post = get_post($id);
                 if ($post && can_delete_post($current_user, $post)) {
                     delete_post($id);
-                    redirect_to('../admin?action=list-posts&success=true');
+                    redirect_to('admin?action=list-posts&success=true');
                 } else {
                     die('Você não tem permissão para deletar este post.');
                 }
@@ -58,7 +58,7 @@ switch ($action) {
                 } else {
                     insert_post($title, $excerpt, $content);
                     // Redirecionar para a Home
-                    redirect_to('../admin?action=list-posts&success=true');
+                    redirect_to('admin?action=list-posts&success=true');
                 }
             }
 

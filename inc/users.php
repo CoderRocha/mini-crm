@@ -89,7 +89,10 @@ function get_user_type_name($user_type) {
  * Verifica se o usuário é admin
  */
 function is_admin($user) {
-    return isset($user['user_type']) && $user['user_type'] == 4;
+    if (!$user || !isset($user['user_type'])) {
+        return false;
+    }
+    return intval($user['user_type']) == 4;
 }
 
 /**
@@ -105,11 +108,19 @@ function can_create_post($user) {
  * Verifica se o usuário pode deletar um post
  */
 function can_delete_post($user, $post) {
-    if (!$user) return false;
+    if (!$user || !$post) return false;
 
-    if (is_admin($user)) return true;
+    // Admins podem deletar qualquer post
+    if (is_admin($user)) {
+        return true;
+    }
 
-    return isset($post['user_id']) && isset($user['id']) && $post['user_id'] == $user['id'];
+    // Usuários podem deletar apenas seus próprios posts
+    if (isset($post['user_id']) && isset($user['id']) && $post['user_id'] == $user['id']) {
+        return true;
+    }
+
+    return false;
 }
 
 /**

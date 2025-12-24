@@ -8,6 +8,10 @@ if (isset($_GET['delete-post'])) {
     }
     
     $current_user = get_logged_in_user();
+    if (!$current_user) {
+        redirect_to('login.php');
+    }
+    
     $id = $_GET['delete-post'];
     
     if (!check_hash('delete-post-' . $id, $_GET['hash'])) {
@@ -15,7 +19,11 @@ if (isset($_GET['delete-post'])) {
     }
     
     $post = get_post($id);
-    if ($post && can_delete_post($current_user, $post)) {
+    if (!$post) {
+        die('Post não encontrado.');
+    }
+    
+    if (can_delete_post($current_user, $post)) {
         delete_post($id);
         redirect_to('index.php?success=deleted');
     } else {
